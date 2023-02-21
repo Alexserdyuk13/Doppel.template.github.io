@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Modifica Documento HTML</title>
+
+    <style>
+        body {
+          font-family: Arial, sans-serif;
+          margin: 0;
+          padding: 0;
+        }
+        h1 {
+          font-size: 24px;
+          margin: 30px;
+        }
+        .container {
+          display: flex;
+          flex-direction: column;
+          margin: 20px;
+        }
+        .label {
+          font-size: 20px;
+          margin-bottom: 10px;
+        }
+        textarea {
+          font-family: monospace;
+          font-size: 16px;
+          padding: 10px;
+          margin-bottom: 20px;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+          resize: vertical;
+        }
+        button {
+          font-size: 20px;
+          padding: 10px;
+          border: none;
+          border-radius: 4px;
+          background-color: #4285f4;
+          color: white;
+          cursor: pointer;
+        }
+        button:hover {
+          background-color: #3367d6;
+        }
+
+        form {padding-left:30px;}
+      </style>
+</head>
+<body>
+	<h1>Modifica Documento HTML</h1>
+	<form>
+		<label for="input-html">HTML da modificare:</label><br>
+		<textarea id="input-html" name="input-html" rows="10" cols="80"></textarea><br><br>
+		<label for="output-html">HTML modificato:</label><br>
+		<textarea id="output-html" name="output-html" rows="10" cols="80" readonly></textarea><br><br>
+		<button type="button" onclick="modifyHtmlDocument()">Modifica</button>
+	</form>
+	<script>
+        function modifyHtmlDocument() {
+        const textAreaInput = document.getElementById('input-html'); // seleziona l'elemento textarea con id 'html-input'
+        const textAreaOutput = document.getElementById('output-html'); // seleziona l'elemento textarea con id 'html-output'
+        let html = textAreaInput.value; // ottieni il valore della textarea di input
+
+        // sostituzioni richieste
+        html = html.replace('<!DOCTYPE', '%%[ set @email = AttributeValue(\'PersonEmail\')\
+        set @subscriberKey = AttributeValue(\'SubscriberKey\')\
+        set @language = AttributeValue(\'language__c\') ]%%\n <!DOCTYPE');
+        
+        html = html.replace('{{ mirror }}', '%%view_email_url%%');
+        
+        html = html.replace('{{ unsubscribe }}', '%%=RedirectTo(CloudPagesURL(1264,\'PersonEmail\', @email,\'language__c\', @language, @subscriberKey, \'SubscriberKey\'))=%%');
+        
+        html = html.replace('</body></html>', '\n<table style="text-align: center; display:none; line-height:initial;" cellpadding="2" cellspacing="0" width="600"\
+                id="Table5" border="0">\
+                <tr>\
+                    <td>\
+                        <font face="verdana" size="1" color="#444444">%%profile_center_url%%This email was sent by:\
+                            <b>%%Member_Busname%%</b><br>%%Member_Addr%% %%Member_City%%, %%Member_State%%,\
+                            %%Member_PostalCode%%, %%Member_Country%%<br><br></font>\
+                    </td>\
+                </tr>\
+            </table>\n\
+            <custom name="opencounter" type="tracking"/>\n\
+        </body></html>');
+
+        textAreaOutput.value = html; // imposta il nuovo valore della textarea di output
+        }
+    </script>
+</body>
+</html>
